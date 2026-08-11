@@ -1,265 +1,199 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Sikka | سكة</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#14120e;
-    --bg-elev:#1c1a15;
-    --cream:#f2ead9;
-    --cream-dim:#b8ae9c;
-    --navy:#3a5a8c;
-    --navy-bright:#5f83bb;
-    --gold:#c9a24a;
-    --line:#332f27;
-    --radius:20px;
-  }
-  [data-theme="light"]{
-    --bg:#f6f1e7;
-    --bg-elev:#ffffff;
-    --cream:#1c1a15;
-    --cream-dim:#6b6252;
-    --navy:#2c4a78;
-    --navy-bright:#3a5a8c;
-    --gold:#a97f22;
-    --line:#e3dbc9;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--cream);
-    font-family:'Manrope', 'Tajawal', sans-serif;
-    min-height:100vh;
-    transition:background .3s ease, color .3s ease;
-    overflow-x:hidden;
-  }
-  body[dir="rtl"]{ font-family:'Tajawal','Manrope', sans-serif; }
-  .display{ font-family:'Fraunces', serif; }
-
-  /* ---------- Track motif (Sikka = "railway track") ---------- */
-  .track{
-    height:14px;
-    width:100%;
-    position:relative;
-    opacity:.55;
-  }
-  .track::before{
-    content:"";
-    position:absolute;
-    top:6px; left:0; right:0; height:2px;
-    background:var(--line);
-  }
-  .track::after{
-    content:"";
-    position:absolute;
-    top:0; left:0; right:0; bottom:0;
-    background-image:repeating-linear-gradient(90deg, var(--line) 0 3px, transparent 3px 16px);
-  }
-
-  /* ---------- Screens ---------- */
-  .screen{ display:none; min-height:100vh; }
-  .screen.active{ display:block; }
-
-  /* ---------- Welcome screen ---------- */
-  #welcome.active{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; padding:32px; text-align:center; gap:28px;
-  }
-  .logo-badge{
-    width:120px; height:120px; border-radius:50%;
-    background:var(--navy);
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 0 0 3px var(--gold), 0 12px 40px rgba(0,0,0,.35);
-  }
-  .logo-badge span{
-    font-family:'Fraunces', serif;
-    font-weight:600; font-size:28px; color:var(--cream);
-    letter-spacing:.5px;
-  }
-  .greeting{
-    background:var(--bg-elev);
-    border:1px solid var(--line);
-    padding:12px 24px; border-radius:999px;
-    font-size:14px; color:var(--cream-dim);
-  }
-  .tagline{
-    font-family:'Fraunces', serif;
-    font-size:15px; color:var(--cream-dim);
-    letter-spacing:.5px;
-  }
-  .btn-primary{
-    background:var(--gold); color:#1c1a15; border:none;
-    padding:16px 36px; border-radius:999px;
-    font-family:'Manrope', 'Tajawal', sans-serif; font-weight:700; font-size:15px;
-    cursor:pointer; display:flex; align-items:center; gap:10px;
-    transition:transform .15s ease;
-  }
-  body[dir="rtl"] .btn-primary{ font-family:'Tajawal', sans-serif; }
-  .btn-primary:hover{ transform:translateY(-2px); }
-  .btn-primary:active{ transform:translateY(0); }
-
-  /* ---------- Menu screen ---------- */
-  #menu{ padding-bottom:60px; }
-  .topbar{
-    position:sticky; top:0; z-index:20;
-    background:var(--bg); padding:16px 16px 10px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .icon-btn{
-    width:42px; height:42px; min-width:42px; border-radius:50%;
-    background:var(--bg-elev); border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; color:var(--cream); font-size:16px;
-  }
-  .search-wrap{
-    flex:1; display:flex; align-items:center; gap:8px;
-    background:var(--bg-elev); border:1px solid var(--line);
-    border-radius:999px; padding:10px 16px;
-  }
-  .search-wrap input{
-    flex:1; background:transparent; border:none; outline:none;
-    color:var(--cream); font-size:14px; font-family:inherit;
-  }
-  .search-wrap input::placeholder{ color:var(--cream-dim); }
-  .pill-btn{
-    background:var(--bg-elev); border:1px solid var(--line);
-    color:var(--cream); border-radius:999px; padding:10px 14px;
-    font-size:12px; font-weight:700; cursor:pointer; letter-spacing:.5px;
-  }
-
-  .cats{
-    display:flex; gap:10px; overflow-x:auto; padding:16px 16px 4px;
-    scrollbar-width:none;
-  }
-  .cats::-webkit-scrollbar{ display:none; }
-  .cat-chip{
-    display:flex; align-items:center; gap:8px;
-    background:var(--bg-elev); border:1px solid var(--line);
-    padding:8px 16px 8px 8px; border-radius:999px;
-    white-space:nowrap; cursor:pointer; flex-shrink:0;
-    font-size:13px; font-weight:700; color:var(--cream-dim);
-    transition:all .15s ease;
-  }
-  body[dir="rtl"] .cat-chip{ padding:8px 8px 8px 16px; }
-  .cat-chip.active{ background:var(--navy); color:#fff; border-color:var(--navy); }
-  .cat-chip .cat-emoji{
-    width:26px; height:26px; border-radius:50%;
-    background:rgba(255,255,255,.08);
-    display:flex; align-items:center; justify-content:center; font-size:14px;
-  }
-
-  .products{
-    display:grid; grid-template-columns:1fr; gap:16px; padding:20px 16px 0;
-    max-width:520px; margin:0 auto;
-  }
-  @media(min-width:640px){
-    .products{ grid-template-columns:1fr 1fr; max-width:900px; }
-  }
-  .card{
-    background:var(--bg-elev); border:1px solid var(--line);
-    border-radius:var(--radius); overflow:hidden;
-    display:flex; flex-direction:column;
-  }
-  .card-img{
-    height:170px; width:100%;
-    background:linear-gradient(135deg, var(--navy) 0%, #22314a 100%);
-    display:flex; align-items:center; justify-content:center;
-    font-size:36px; color:rgba(255,255,255,.5);
-  }
-  .card-body{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; }
-  .card-tag{
-    font-size:11px; text-transform:uppercase; letter-spacing:1px;
-    color:var(--gold); font-weight:800;
-  }
-  .card-name{
-    font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--cream);
-  }
-  .card-row{ display:flex; align-items:center; justify-content:space-between; margin-top:2px; }
-  .price-badge{
-    background:var(--gold); color:#1c1a15;
-    font-weight:800; font-size:13px;
-    padding:6px 14px; border-radius:999px;
-  }
-  .empty-state{
-    text-align:center; padding:60px 20px; color:var(--cream-dim);
-    grid-column:1/-1;
-  }
-
-  /* ---------- Detail screen ---------- */
-  .detail-hero{
-    width:100%; height:45vh; min-height:280px;
-    background:linear-gradient(135deg, var(--navy) 0%, #22314a 100%);
-    background-size:cover; background-position:center;
-    display:flex; align-items:center; justify-content:center;
-    font-size:64px; color:rgba(255,255,255,.5);
-  }
-  .detail-back{
-    position:fixed; top:16px; inset-inline-start:16px; z-index:30;
-    background:rgba(20,18,14,.65); backdrop-filter:blur(4px);
-    border:1px solid rgba(255,255,255,.2); color:#fff;
-  }
-  body[dir="rtl"] .detail-back{ transform:scaleX(-1); }
-  .detail-body{
-    padding:24px 20px 60px; max-width:560px; margin:0 auto;
-  }
-  .detail-name{
-    font-family:'Fraunces', serif; font-size:26px; font-weight:600; color:var(--cream);
-    margin-top:6px;
-  }
-  .detail-sub{
-    color:var(--cream-dim); font-size:14px; margin-top:4px;
-  }
-  .detail-price{
-    display:inline-block; background:var(--gold); color:#1c1a15;
-    font-weight:800; font-size:16px; padding:10px 20px; border-radius:999px;
-    margin-top:18px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة سكة كافيه - Sikka Cafe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            font-size: 1.4rem;
+            color: #d4af37;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .product-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            background-color: #333;
+        }
+        .product-name {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .product-price {
+            color: #4cd137;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .product-stock {
+            font-size: 0.85rem;
+            color: #e84118;
+        }
+    </style>
 </head>
-<body dir="rtl" data-theme="dark">
+<body>
 
-  <!-- SCREEN 1: WELCOME -->
-  <section id="welcome" class="screen active">
-    <div class="logo-badge"><span>Sikka</span></div>
-    <div class="greeting" id="greetingText" style="cursor:pointer;">☕ صباح الخير</div>
-    <button class="btn-primary" id="exploreBtn">
-      <span id="exploreLabel">استكشف القائمة</span> <span>←</span>
-    </button>
-    <div class="tagline" id="taglineText">Your Tracks Lead To Sikka</div>
-  </section>
+    <header>
+        <h1>سكة كافيه - Sikka Cafe</h1>
+        <p>قائمة المنتجات الكاملة</p>
+    </header>
 
-  <!-- SCREEN 2: MENU -->
-  <section id="menu" class="screen">
-    <div class="topbar">
-      <div class="icon-btn" id="themeBtn">🌙</div>
-      <div class="pill-btn" id="langBtn">EN</div>
-      <div class="search-wrap">
-        <span style="color:var(--cream-dim); font-size:14px;">🔍</span>
-        <input id="searchInput" type="text" placeholder="البحث في القائمة..." oninput="renderProducts()">
-      </div>
-      <div class="icon-btn" id="homeBtn">⌂</div>
+    <div id="menu-container">
+        <!-- Matcha Signatures -->
+        <div class="category-section">
+            <h2 class="category-title">Matcha Signatures</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Coco Matcha</div><div class="product-price">AED 28.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Dirty matcha</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Matcha latte</div><div class="product-price">AED 28.00</div></div>
+            </div>
+        </div>
+
+        <!-- Others -->
+        <div class="category-section">
+            <h2 class="category-title">Others</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=300" class="product-img"><div class="product-name">Duck</div><div class="product-price">-</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300" class="product-img"><div class="product-name">Sparkling Water</div><div class="product-price">AED 8.00</div><div class="product-stock">13 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300" class="product-img"><div class="product-name">Still Water</div><div class="product-price">AED 8.00</div><div class="product-stock">27 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">V60 Paper filter</div><div class="product-price">AED 35.00</div></div>
+            </div>
+        </div>
+
+        <!-- Sandwich -->
+        <div class="category-section">
+            <h2 class="category-title">Sandwich</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant (Plain)</div><div class="product-price">AED 16.00</div><div class="product-stock">3 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Cheese tomato da...</div><div class="product-price">AED 25.00</div><div class="product-stock">4 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Papion (Plain)</div><div class="product-price">AED 16.00</div><div class="product-stock">1 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Raspberry flower</div><div class="product-price">AED 25.00</div><div class="product-stock">2 موجود بالمخزن</div></div>
+            </div>
+        </div>
+
+        <!-- Non Coffee Signatures -->
+        <div class="category-section">
+            <h2 class="category-title">Non Coffee Signatures</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" class="product-img"><div class="product-name">(Non coffee) Dirty karak</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300" class="product-img"><div class="product-name">(Non Coffee) Hibiscus Iced Tea</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300" class="product-img"><div class="product-name">(Non Coffee) Hot Chocolate...</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300" class="product-img"><div class="product-name">(Non Coffee) Iced Chocolate</div><div class="product-price">AED 28.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" class="product-img"><div class="product-name">(Non Coffee) Pistachio Milks...</div><div class="product-price">AED 30.00</div></div>
+            </div>
+        </div>
+
+        <!-- Signature Coffee -->
+        <div class="category-section">
+            <h2 class="category-title">Signature Coffee</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=300" class="product-img"><div class="product-name">(Signature) Frosty Frappe</div><div class="product-price">AED 30.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Signature) Hot Spanish latte</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Signature) Hot X.O.</div><div class="product-price">AED 26.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=300" class="product-img"><div class="product-name">(Signature) Iced Crème Brûlée</div><div class="product-price">AED 28.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Signature) Iced Spanish latte</div><div class="product-price">AED 26.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Signature) Iced X.O.</div><div class="product-price">AED 26.00</div></div>
+            </div>
+        </div>
+
+        <!-- Specialty Coffee -->
+        <div class="category-section">
+            <h2 class="category-title">Specialty Coffee</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Affogato</div><div class="product-price">AED 19.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Cafe latte</div><div class="product-price">AED 20.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cappuccino</div><div class="product-price">AED 19.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cascara infused</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cortado</div><div class="product-price">AED 19.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=300" class="product-img"><div class="product-name">(Coffee) Dirty Espresso</div><div class="product-price">AED 21.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Duet</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=300" class="product-img"><div class="product-name">(Coffee) Espresso</div><div class="product-price">AED 16.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Espresso Tonic</div><div class="product-price">AED 25.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Flat white</div><div class="product-price">AED 19.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Hot Americano</div><div class="product-price">AED 16.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Iced Americano</div><div class="product-price">AED 16.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Iced Latte</div><div class="product-price">AED 21.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Piccolo</div><div class="product-price">AED 19.00</div></div>
+            </div>
+        </div>
+
+        <!-- Smoothies -->
+        <div class="category-section">
+            <h2 class="category-title">Smoothies</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300" class="product-img"><div class="product-name">Açaí Smoothie</div><div class="product-price">AED 35.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300" class="product-img"><div class="product-name">Y? Protein</div><div class="product-price">AED 35.00</div></div>
+            </div>
+        </div>
+
+        <!-- Sweets -->
+        <div class="category-section">
+            <h2 class="category-title">Sweets</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweet) Mango sticky rice</div><div class="product-price">AED 28.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Banana Pudding</div><div class="product-price">AED 25.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Blueblack London...</div><div class="product-price">AED 12.00</div><div class="product-stock">9 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Chocolate fruits Do...</div><div class="product-price">AED 15.00</div><div class="product-stock">6 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Cookies Scoop</div><div class="product-price">AED 28.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Honey Milk Cake</div><div class="product-price">AED 30.00</div><div class="product-stock">10 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) London mini cheese...</div><div class="product-price">AED 12.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Mango pudding</div><div class="product-price">AED 25.00</div><div class="product-stock">4 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Salted Nutella Cook...</div><div class="product-price">AED 12.00</div><div class="product-stock">10 موجود بالمخزن</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Tiramisu Cake</div><div class="product-price">AED 28.00</div><div class="product-stock">9 موجود بالمخزن</div></div>
+            </div>
+        </div>
+
+        <!-- Manual Brewing -->
+        <div class="category-section">
+            <h2 class="category-title">Manual Brewing</h2>
+            <div class="products-grid">
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Binocular Blend</div><div class="product-price">AED 35.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Hot V60</div><div class="product-price">AED 28.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Iced V60</div><div class="product-price">AED 28.00</div></div>
+                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) You Brew!</div><div class="product-price">AED 18.00</div></div>
+            </div>
+        </div>
     </div>
-    <div class="track"></div>
-    <div class="cats" id="catsRow"></div>
-    <div class="products" id="productsGrid"></div>
-  </section>
 
-  <!-- SCREEN 3: PRODUCT DETAIL -->
-  <section id="detail" class="screen">
-    <div class="detail-hero" id="detailHero"></div>
-    <div class="icon-btn detail-back" id="detailBackBtn">←</div>
-    <div class="detail-body">
-      <div class="card-tag" id="detailTag"></div>
-      <div class="detail-name" id="detailName"></div>
-      <div class="detail-sub" id="detailSub"></div>
-      <div class="detail-price" id="detailPrice"></div>
-    </div>
-  </section>
-
-<script>
-/* ---------------- DATA ---------------- */
-const IMG = {affogato:"data:image/jpeg;base64,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
+</body>
+                                                                                                                                                                                                         </html>
+                  
