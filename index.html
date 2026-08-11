@@ -3,197 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة سكة كافيه - Sikka Cafe</title>
+    <title>قائمة منتجات سكة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Tahoma, Arial, sans-serif;
-        }
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            padding: 20px;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-        .category-section {
-            margin-bottom: 40px;
-        }
-        .category-title {
-            font-size: 1.4rem;
-            color: #d4af37;
-            border-bottom: 2px solid #333;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-        }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        .product-img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            background-color: #333;
-        }
-        .product-name {
-            font-size: 1rem;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .product-price {
-            color: #4cd137;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        .product-stock {
-            font-size: 0.85rem;
-            color: #e84118;
-        }
+        * { border-radius: 8px !important; }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300" id="bodyTag">
 
-    <header>
-        <h1>سكة كافيه - Sikka Cafe</h1>
-        <p>قائمة المنتجات الكاملة</p>
-    </header>
-
-    <div id="menu-container">
-        <!-- Matcha Signatures -->
-        <div class="category-section">
-            <h2 class="category-title">Matcha Signatures</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Coco Matcha</div><div class="product-price">AED 28.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Dirty matcha</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b08?w=300" class="product-img"><div class="product-name">(Matcha) Matcha latte</div><div class="product-price">AED 28.00</div></div>
-            </div>
+    <!-- شاشة الترحيب الرئيسية (الصفحة الافتتاحية) -->
+    <div id="welcomeScreen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center p-6 text-center">
+        <!-- شعار سكة -->
+        <div class="mb-8 p-4 bg-slate-900 border border-slate-800 shadow-xl inline-block">
+            <h1 class="text-3xl font-extrabold tracking-widest text-amber-500">سِكَّة</h1>
+            <p class="text-xs text-slate-400 mt-1">Sikka Cafe</p>
         </div>
 
-        <!-- Others -->
-        <div class="category-section">
-            <h2 class="category-title">Others</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=300" class="product-img"><div class="product-name">Duck</div><div class="product-price">-</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300" class="product-img"><div class="product-name">Sparkling Water</div><div class="product-price">AED 8.00</div><div class="product-stock">13 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300" class="product-img"><div class="product-name">Still Water</div><div class="product-price">AED 8.00</div><div class="product-stock">27 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">V60 Paper filter</div><div class="product-price">AED 35.00</div></div>
-            </div>
+        <!-- أزرار الشاشة الرئيسية -->
+        <div class="w-full max-w-xs space-y-4">
+            <button onclick="showMorningGreet()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 py-3 px-6 text-sm font-semibold transition flex items-center justify-center gap-2 shadow-md">
+                <span>☕</span> صباح الخير
+            </button>
+            <button onclick="enterMenu()" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 py-3.5 px-6 text-sm font-bold transition flex items-center justify-center gap-2 shadow-lg">
+                <span>←</span> استكشف القائمة
+            </button>
         </div>
+    </div>
 
-        <!-- Sandwich -->
-        <div class="category-section">
-            <h2 class="category-title">Sandwich</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant (Plain)</div><div class="product-price">AED 16.00</div><div class="product-stock">3 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Cheese tomato da...</div><div class="product-price">AED 25.00</div><div class="product-stock">4 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Papion (Plain)</div><div class="product-price">AED 16.00</div><div class="product-stock">1 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300" class="product-img"><div class="product-name">Croissant Raspberry flower</div><div class="product-price">AED 25.00</div><div class="product-stock">2 موجود بالمخزن</div></div>
-            </div>
+    <!-- نافذة رسالة صباح الخير المنبثقة -->
+    <div id="morningModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 max-w-sm w-full p-6 text-center relative">
+            <h3 class="text-xl font-bold text-amber-400 mb-2">صباح الخير من سكة! ☀️</h3>
+            <p class="text-slate-300 text-sm mb-6">نتمنى لك يوماً جميلاً مليئاً بالطاقة والنشاط مع قهوتنا المختصة.</p>
+            <button onclick="closeMorningGreet()" class="bg-amber-500 text-slate-950 px-6 py-2 font-bold text-sm">حسناً</button>
         </div>
+    </div>
 
-        <!-- Non Coffee Signatures -->
-        <div class="category-section">
-            <h2 class="category-title">Non Coffee Signatures</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" class="product-img"><div class="product-name">(Non coffee) Dirty karak</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300" class="product-img"><div class="product-name">(Non Coffee) Hibiscus Iced Tea</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300" class="product-img"><div class="product-name">(Non Coffee) Hot Chocolate...</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300" class="product-img"><div class="product-name">(Non Coffee) Iced Chocolate</div><div class="product-price">AED 28.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" class="product-img"><div class="product-name">(Non Coffee) Pistachio Milks...</div><div class="product-price">AED 30.00</div></div>
+    <!-- المحتوى الرئيسي للقائمة -->
+    <div id="mainApp" class="hidden">
+        <!-- الهيدر العلوي -->
+        <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800 p-4 flex items-center justify-between gap-2 shadow-lg">
+            <div class="font-bold text-xl tracking-wider text-amber-500 cursor-pointer" onclick="backToHome()">سِكَّة</div>
+            
+            <div class="relative flex-1 max-w-md">
+                <input type="text" id="searchInput" placeholder="البحث في القائمة..." oninput="filterProducts()" 
+                    class="w-full bg-slate-800 text-sm text-slate-200 px-4 py-2 pr-10 border border-slate-700 focus:outline-none focus:border-amber-500">
+                <span class="absolute right-3 top-2.5 text-slate-400">🔍</span>
             </div>
-        </div>
 
-        <!-- Signature Coffee -->
-        <div class="category-section">
-            <h2 class="category-title">Signature Coffee</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=300" class="product-img"><div class="product-name">(Signature) Frosty Frappe</div><div class="product-price">AED 30.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Signature) Hot Spanish latte</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Signature) Hot X.O.</div><div class="product-price">AED 26.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=300" class="product-img"><div class="product-name">(Signature) Iced Crème Brûlée</div><div class="product-price">AED 28.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Signature) Iced Spanish latte</div><div class="product-price">AED 26.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Signature) Iced X.O.</div><div class="product-price">AED 26.00</div></div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleLang()" id="langBtn" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-sm font-semibold border border-slate-700 transition">EN</button>
+                <button onclick="toggleTheme()" id="themeBtn" class="bg-slate-800 hover:bg-slate-700 p-2 border border-slate-700 transition">☀️</button>
             </div>
-        </div>
+        </header>
 
-        <!-- Specialty Coffee -->
-        <div class="category-section">
-            <h2 class="category-title">Specialty Coffee</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Affogato</div><div class="product-price">AED 19.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Cafe latte</div><div class="product-price">AED 20.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cappuccino</div><div class="product-price">AED 19.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cascara infused</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Cortado</div><div class="product-price">AED 19.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=300" class="product-img"><div class="product-name">(Coffee) Dirty Espresso</div><div class="product-price">AED 21.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Duet</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=300" class="product-img"><div class="product-name">(Coffee) Espresso</div><div class="product-price">AED 16.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Espresso Tonic</div><div class="product-price">AED 25.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Flat white</div><div class="product-price">AED 19.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Hot Americano</div><div class="product-price">AED 16.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Iced Americano</div><div class="product-price">AED 16.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=300" class="product-img"><div class="product-name">(Coffee) Iced Latte</div><div class="product-price">AED 21.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Coffee) Piccolo</div><div class="product-price">AED 19.00</div></div>
+        <!-- شريط الفلاتر والأقسام -->
+        <nav class="p-4 flex gap-3 overflow-x-auto border-b border-slate-900 bg-slate-950 items-center justify-between">
+            <div class="flex gap-3 overflow-x-auto">
+                <button onclick="filterCategory('all')" class="cat-btn bg-amber-500 text-slate-950 px-4 py-2 text-sm font-bold whitespace-nowrap transition">الكل</button>
+                <button onclick="filterCategory('Sweets')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">🍰 حلويات</button>
+                <button onclick="filterCategory('Breakfast')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">🥐 فطور</button>
+                <button onclick="filterCategory('Specialty Coffee')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">☕ قهوة مختصة</button>
+                <button onclick="filterCategory('Signature Coffee')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">🌟 قهوة مميزة</button>
+                <button onclick="filterCategory('Matcha')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">🍵 ماتشا</button>
+                <button onclick="filterCategory('Non-Coffee Drinks')" class="cat-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 text-sm font-bold whitespace-nowrap border border-slate-800 transition">🥤 مشروبات أخرى</button>
             </div>
-        </div>
+        </nav>
 
-        <!-- Smoothies -->
-        <div class="category-section">
-            <h2 class="category-title">Smoothies</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300" class="product-img"><div class="product-name">Açaí Smoothie</div><div class="product-price">AED 35.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300" class="product-img"><div class="product-name">Y? Protein</div><div class="product-price">AED 35.00</div></div>
+        <!-- شبكة المنتجات -->
+        <main class="p-4 max-w-7xl mx-auto">
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- تعبئة ديناميكية -->
             </div>
-        </div>
+        </main>
+    </div>
 
-        <!-- Sweets -->
-        <div class="category-section">
-            <h2 class="category-title">Sweets</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweet) Mango sticky rice</div><div class="product-price">AED 28.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Banana Pudding</div><div class="product-price">AED 25.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Blueblack London...</div><div class="product-price">AED 12.00</div><div class="product-stock">9 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Chocolate fruits Do...</div><div class="product-price">AED 15.00</div><div class="product-stock">6 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Cookies Scoop</div><div class="product-price">AED 28.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Honey Milk Cake</div><div class="product-price">AED 30.00</div><div class="product-stock">10 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) London mini cheese...</div><div class="product-price">AED 12.00</div><div class="product-stock">5 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Mango pudding</div><div class="product-price">AED 25.00</div><div class="product-stock">4 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Salted Nutella Cook...</div><div class="product-price">AED 12.00</div><div class="product-stock">10 موجود بالمخزن</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=300" class="product-img"><div class="product-name">(Sweets) Tiramisu Cake</div><div class="product-price">AED 28.00</div><div class="product-stock">9 موجود بالمخزن</div></div>
+    <!-- نافذة تفاصيل المنتج مع زر تعديل/إرفاق الصورة شخصياً -->
+    <div id="productModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 max-w-lg w-full p-6 relative">
+            <button onclick="closeModal()" class="absolute top-3 left-3 text-slate-400 hover:text-white text-xl font-bold">✕</button>
+            
+            <div class="w-full h-64 overflow-hidden mb-4 border border-slate-800 bg-slate-800 flex items-center justify-center relative group">
+                <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+                <!-- زر رفع أو تغيير صورة المنتج محلياً -->
+                <label class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center cursor-pointer text-amber-400 font-semibold text-sm">
+                    <span>📷 انقر لتغيير أو إرفاق صورة</span>
+                    <input type="file" accept="image/*" class="hidden" onchange="uploadProductImage(event)">
+                </label>
             </div>
-        </div>
 
-        <!-- Manual Brewing -->
-        <div class="category-section">
-            <h2 class="category-title">Manual Brewing</h2>
-            <div class="products-grid">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Binocular Blend</div><div class="product-price">AED 35.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Hot V60</div><div class="product-price">AED 28.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) Iced V60</div><div class="product-price">AED 28.00</div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300" class="product-img"><div class="product-name">(Filter) You Brew!</div><div class="product-price">AED 18.00</div></div>
+            <h2 id="modalTitle" class="text-2xl font-bold text-amber-400 mb-2"></h2>
+            <p id="modalDesc" class="text-slate-300 text-sm mb-4 leading-relaxed"></p>
+            
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-800">
+                <span id="modalPrice" class="text-lg font-bold text-emerald-400"></span>
+                <button onclick="closeModal()" class="bg-amber-500 text-slate-950 px-5 py-2 font-bold text-sm">إغلاق</button>
             </div>
         </div>
     </div>
 
+    <!-- سكربت التشغيل وإدارة الصور محلياً -->
+    <script>
+        let products = [
+            { id: 1, name: "بودنج المانجو", enName: "Mango Pudding", category: "Sweets", price: 25.00, image: "", description: "بودنج مانجو منعش ومحضر بطريقة استوائية فريدة." },
+            { id: 2, name: "أرز المانجو اللزج", enName: "Mango Sticky Rice Bowl", category: "Sweets", price: 28.00, image: "", description: "الحلا الآسيوي الكلاسيكي المكون من الأرز والمانجو الطازج." },
+            { id: 3, name: "وعاء الآساي", enName: "Açaí Bowl", category: "Sweets", price: 36.00, image: "", description: "وعاء صحي ومنعش من الآساي مع الفواكه الطازجة والجرانولا." },
+            { id: 4, name: "كوكيز شوكلت شيبس", enName: "Chocolate Chip Cookie", category: "Sweets", price: 22.00, image: "", description: "كوكيز طازجة ودافئة بحبيبات الشوكولاتة الفاخرة." },
+            { id: 5, name: "كوكيز مع آيس كريم", enName: "Cookie with Ice Cream", category: "Sweets", price: 28.00, image: "", description: "كوكيز طرية مغطاة بكرة آيس كريم غنية." },
+            { id: 6, name: "كعكة التيراميسو", enName: "Tiramisu Cake", category: "Sweets", price: 28.00, image: "", description: "كعكة تيراميسو إيطالية أصلية ومميزة." },
+
+            { id: 7, name: "كرواسون سادة", enName: "Plain Croissant", category: "Breakfast", price: 16.00, image: "", description: "كرواسون فرنسي كلاسيكي هش ومقرمش بطبقات الزبدة." },
+            { id: 8, name: "كرواسون بابيون", enName: "Pappion Croissant", category: "Breakfast", price: 18.00, image: "", description: "كرواسون بتصميم فراشة فريد ومقرمش." },
+            { id: 9, name: "كرواسون بالجبن", enName: "Cheese Croissant", category: "Breakfast", price: 19.00, image: "", description: "كرواسون غني ومزين بالجبن المذاب." },
+            { id: 10, name: "كرواسون الطماطم الصيفية", enName: "Summer Tomato Croissant", category: "Breakfast", price: 22.00, image: "", description: "مخبوزات مالحة ومبتكرة بطماطم الكرز الطازجة." },
+            { id: 11, name: "فطيرة الجبن والزعتر", enName: "Thyme & Cheese Pastry", category: "Breakfast", price: 21.00, image: "", description: "فطيرة مربعة محشوة بالجبن الأبيض ورشات الزعتر." },
+
+            { id: 12, name: "لاتيه / كابتشينو ساخن", enName: "Hot Latte / Cappuccino", category: "Specialty Coffee", price: 19.00, image: "", description: "إسبريسو غني مع حليب مخفوق ناعم." },
+            { id: 13, name: "آيسد سبانيش لاتيه", enName: "Iced Spanish Latte", category: "Specialty Coffee", price: 26.00, image: "", description: "مشروب بارد ومنعش بطبقات الحليب والإسبريسو." },
+            { id: 14, name: "آيس كوفي كلاسيكي", enName: "Classic Iced Coffee", category: "Specialty Coffee", price: 24.00, image: "", description: "قهوة باردة ومثلجة محضرة من أجود حبوب القهوة." },
+
+            { id: 15, name: "آيسد إكس.أو. قهوة", enName: "Iced X.O. Coffee", category: "Signature Coffee", price: 26.00, image: "", description: "مشروب سكة المميز والبارد بنكهة خاصة." },
+            { id: 16, name: "فروستي فرابي", enName: "Frosty Frappe", category: "Signature Coffee", price: 28.00, image: "", description: "مشروب فرابي مثلج ومنعش." },
+
+            { id: 17, name: "ماتشا لاتيه مثلج", enName: "Iced Matcha Latte", category: "Matcha", price: 28.00, image: "", description: "ماتشا يابانية أصلية باردة مع الحليب والثلج." },
+            { id: 18, name: "ماتشا مع طبقة المانجو", enName: "Mango Matcha Fusion", category: "Matcha", price: 30.00, image: "", description: "مزيج مبتكر يجمع بين حلاوة المانجو والماتشا." },
+
+            { id: 19, name: "بروتين شيك (واي بروتين)", enName: "Protein Shake", category: "Non-Coffee Drinks", price: 35.00, image: "", description: "مشروب بروتين صحي عالي الجودة." },
+            { id: 20, name: "آيس تي الكركديه", enName: "Hibiscus Iced Tea", category: "Non-Coffee Drinks", price: 25.00, image: "", description: "شاي الكركديه البارد والمنعش." }
+        ];
+
+        let currentLang = 'ar';
+        let currentCategory = 'all';
+        let activeProductId = null;
+
+        function enterMenu() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            renderProducts(products);
+        }
+
+        function backToHome() {
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+        }
+
+        function showMorningGreet() {
+            document.getElementById('morningModal').classList.remove('hidden');
+        }
+
+        function closeMorningGreet() {
+            document.getElementById('morningModal').classList.add('hidden');
+        }
+
+        function renderProducts(items) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            if(items.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-slate-500 py-10">لا توجد منتجات مطابقة للبحث</p>`;
+                return;
+            }
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 overflow-hidden cursor-pointer hover:border-amber-500/50 transition duration-200 group shadow-md";
+                card.onclick = () => openModal(product);
+                
+                // عرض الصورة أو أيقونة افتراضية في حال لم يتم إرفاق صورة بعد
+                const imageContent = product.image 
+                    ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">`
+                    : `<div class="flex flex-col items-center justify-center text-slate-500 text-xs gap-1"><span>📷</span><span>انقر لإضافة صورة</span></div>`;
+
+                card.innerHTML = `
+                    <div class="overflow-hidden h-48 bg-slate-800 relative flex items-center justify-center">
+                        ${imageContent}
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-slate-200 mb-1">${currentLang === 'ar' ? product.name : product.enName}</h3>
+                        <div class="inline-block bg-slate-800 text-amber-400 px-3 py-1 text-sm font-semibold border border-slate-700 mt-2">
+                            AED ${product.price.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-slate-950');
+                btn.classList.add('bg-slate-900', 'text-slate-300');
+            });
+            event.target.classList.remove('bg-slate-900', 'text-slate-300');
+            event.target.classList.add('bg-amber-500', 'text-slate-950');
+
+            applyFilters();
+        }
+
+        function filterProducts() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchesCat = currentCategory === 'all' || p.category === currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(query) || p.enName.toLowerCase().includes(query);
+                return matchesCat && matchesSearch;
+            });
+            renderProducts(filtered);
+        }
+
+        function openModal(product) {
+            activeProductId = product.id;
+            const imgEl = document.getElementById('modalImg');
+            if (product.image) {
+                imgEl.src = product.image;
+                imgEl.classList.remove('hidden');
+            } else {
+                imgEl.src = '';
+                imgEl.classList.add('hidden');
+            }
+            document.getElementById('modalTitle').innerText = currentLang === 'ar' ? product.name : product.enName;
+            document.getElementById('modalDesc').innerText = product.description;
+            document.getElementById('modalPrice').innerText = `AED ${product.price.toFixed(2)}`;
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+            activeProductId = null;
+        }
+
+        // دالة رفع وإرفاق الصورة محلياً للمنتج المحدد
+        function uploadProductImage(event) {
+            const file = event.target.files[0];
+            if (file && activeProductId !== null) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const product = products.find(p => p.id === activeProductId);
+                    if (product) {
+                        product.image = e.target.result; // حفظ الصورة كبيانات محلية
+                        document.getElementById('modalImg').src = product.image;
+                        document.getElementById('modalImg').classList.remove('hidden');
+                        renderProducts(products); // تحديث العرض في الشبكة فوراً
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.getElementById('langBtn').innerText = currentLang === 'ar' ? 'EN' : 'AR';
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLang);
+            applyFilters();
+        }
+
+        function toggleTheme() {
+            const body = document.getElementById('bodyTag');
+            const themeBtn = document.getElementById('themeBtn');
+            if(body.classList.contains('bg-slate-950')) {
+                body.classList.remove('bg-slate-950', 'text-slate-100');
+                body.classList.add('bg-slate-100', 'text-slate-900');
+                themeBtn.innerText = '🌙';
+            } else {
+                body.classList.remove('bg-slate-100', 'text-slate-900');
+                body.classList.add('bg-slate-950', 'text-slate-100');
+                themeBtn.innerText = '☀️';
+            }
+        }
+    </script>
 </body>
-                                                                                                                                                                                                         </html>
-                  
+</html>
+
