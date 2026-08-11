@@ -92,18 +92,13 @@
         </main>
     </div>
 
-    <!-- نافذة تفاصيل المنتج مع زر تعديل/إرفاق الصورة شخصياً -->
+    <!-- نافذة تفاصيل المنتج -->
     <div id="productModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 max-w-lg w-full p-6 relative">
             <button onclick="closeModal()" class="absolute top-3 left-3 text-slate-400 hover:text-white text-xl font-bold">✕</button>
             
-            <div class="w-full h-64 overflow-hidden mb-4 border border-slate-800 bg-slate-800 flex items-center justify-center relative group">
+            <div class="w-full h-64 overflow-hidden mb-4 border border-slate-800 bg-slate-800 flex items-center justify-center">
                 <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
-                <!-- زر رفع أو تغيير صورة المنتج محلياً -->
-                <label class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center cursor-pointer text-amber-400 font-semibold text-sm">
-                    <span>📷 انقر لتغيير أو إرفاق صورة</span>
-                    <input type="file" accept="image/*" class="hidden" onchange="uploadProductImage(event)">
-                </label>
             </div>
 
             <h2 id="modalTitle" class="text-2xl font-bold text-amber-400 mb-2"></h2>
@@ -116,39 +111,38 @@
         </div>
     </div>
 
-    <!-- سكربت التشغيل وإدارة الصور محلياً -->
+    <!-- سكربت التشغيل وعرض المنتجات بالصور -->
     <script>
-        let products = [
-            { id: 1, name: "بودنج المانجو", enName: "Mango Pudding", category: "Sweets", price: 25.00, image: "", description: "بودنج مانجو منعش ومحضر بطريقة استوائية فريدة." },
-            { id: 2, name: "أرز المانجو اللزج", enName: "Mango Sticky Rice Bowl", category: "Sweets", price: 28.00, image: "", description: "الحلا الآسيوي الكلاسيكي المكون من الأرز والمانجو الطازج." },
-            { id: 3, name: "وعاء الآساي", enName: "Açaí Bowl", category: "Sweets", price: 36.00, image: "", description: "وعاء صحي ومنعش من الآساي مع الفواكه الطازجة والجرانولا." },
-            { id: 4, name: "كوكيز شوكلت شيبس", enName: "Chocolate Chip Cookie", category: "Sweets", price: 22.00, image: "", description: "كوكيز طازجة ودافئة بحبيبات الشوكولاتة الفاخرة." },
-            { id: 5, name: "كوكيز مع آيس كريم", enName: "Cookie with Ice Cream", category: "Sweets", price: 28.00, image: "", description: "كوكيز طرية مغطاة بكرة آيس كريم غنية." },
-            { id: 6, name: "كعكة التيراميسو", enName: "Tiramisu Cake", category: "Sweets", price: 28.00, image: "", description: "كعكة تيراميسو إيطالية أصلية ومميزة." },
+        const products = [
+            { id: 1, name: "بودنج المانجو", enName: "Mango Pudding", category: "Sweets", price: 25.00, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=60", description: "بودنج مانجو منعش ومحضر بطريقة استوائية فريدة." },
+            { id: 2, name: "أرز المانجو اللزج", enName: "Mango Sticky Rice Bowl", category: "Sweets", price: 28.00, image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60", description: "الحلا الآسيوي الكلاسيكي المكون من الأرز والمانجو الطازج." },
+            { id: 3, name: "وعاء الآساي", enName: "Açaí Bowl", category: "Sweets", price: 36.00, image: "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=500&auto=format&fit=crop&q=60", description: "وعاء صحي ومنعش من الآساي مع الفواكه الطازجة والجرانولا." },
+            { id: 4, name: "كوكيز شوكلت شيبس", enName: "Chocolate Chip Cookie", category: "Sweets", price: 22.00, image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&auto=format&fit=crop&q=60", description: "كوكيز طازجة ودافئة بحبيبات الشوكولاتة الفاخرة." },
+            { id: 5, name: "كوكيز مع آيس كريم", enName: "Cookie with Ice Cream", category: "Sweets", price: 28.00, image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&auto=format&fit=crop&q=60", description: "كوكيز طرية مغطاة بكرة آيس كريم غنية." },
+            { id: 6, name: "كعكة التيراميسو", enName: "Tiramisu Cake", category: "Sweets", price: 28.00, image: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=500&auto=format&fit=crop&q=60", description: "كعكة تيراميسو إيطالية أصلية ومميزة." },
 
-            { id: 7, name: "كرواسون سادة", enName: "Plain Croissant", category: "Breakfast", price: 16.00, image: "", description: "كرواسون فرنسي كلاسيكي هش ومقرمش بطبقات الزبدة." },
-            { id: 8, name: "كرواسون بابيون", enName: "Pappion Croissant", category: "Breakfast", price: 18.00, image: "", description: "كرواسون بتصميم فراشة فريد ومقرمش." },
-            { id: 9, name: "كرواسون بالجبن", enName: "Cheese Croissant", category: "Breakfast", price: 19.00, image: "", description: "كرواسون غني ومزين بالجبن المذاب." },
-            { id: 10, name: "كرواسون الطماطم الصيفية", enName: "Summer Tomato Croissant", category: "Breakfast", price: 22.00, image: "", description: "مخبوزات مالحة ومبتكرة بطماطم الكرز الطازجة." },
-            { id: 11, name: "فطيرة الجبن والزعتر", enName: "Thyme & Cheese Pastry", category: "Breakfast", price: 21.00, image: "", description: "فطيرة مربعة محشوة بالجبن الأبيض ورشات الزعتر." },
+            { id: 7, name: "كرواسون سادة", enName: "Plain Croissant", category: "Breakfast", price: 16.00, image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&auto=format&fit=crop&q=60", description: "كرواسون فرنسي كلاسيكي هش ومقرمش بطبقات الزبدة." },
+            { id: 8, name: "كرواسون بابيون", enName: "Pappion Croissant", category: "Breakfast", price: 18.00, image: "https://images.unsplash.com/photo-1623341214825-9f4f963727da?w=500&auto=format&fit=crop&q=60", description: "كرواسون بتصميم فراشة فريد ومقرمش." },
+            { id: 9, name: "كرواسون بالجبن", enName: "Cheese Croissant", category: "Breakfast", price: 19.00, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&auto=format&fit=crop&q=60", description: "كرواسون غني ومزين بالجبن المذاب." },
+            { id: 10, name: "كرواسون الطماطم الصيفية", enName: "Summer Tomato Croissant", category: "Breakfast", price: 22.00, image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=500&auto=format&fit=crop&q=60", description: "مخبوزات مالحة ومبتكرة بطماطم الكرز الطازجة." },
+            { id: 11, name: "فطيرة الجبن والزعتر", enName: "Thyme & Cheese Pastry", category: "Breakfast", price: 21.00, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60", description: "فطيرة مربعة محشوة بالجبن الأبيض ورشات الزعتر." },
 
-            { id: 12, name: "لاتيه / كابتشينو ساخن", enName: "Hot Latte / Cappuccino", category: "Specialty Coffee", price: 19.00, image: "", description: "إسبريسو غني مع حليب مخفوق ناعم." },
-            { id: 13, name: "آيسد سبانيش لاتيه", enName: "Iced Spanish Latte", category: "Specialty Coffee", price: 26.00, image: "", description: "مشروب بارد ومنعش بطبقات الحليب والإسبريسو." },
-            { id: 14, name: "آيس كوفي كلاسيكي", enName: "Classic Iced Coffee", category: "Specialty Coffee", price: 24.00, image: "", description: "قهوة باردة ومثلجة محضرة من أجود حبوب القهوة." },
+            { id: 12, name: "لاتيه / كابتشينو ساخن", enName: "Hot Latte / Cappuccino", category: "Specialty Coffee", price: 19.00, image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=500&auto=format&fit=crop&q=60", description: "إسبريسو غني مع حليب مخفوق ناعم." },
+            { id: 13, name: "آيسد سبانيش لاتيه", enName: "Iced Spanish Latte", category: "Specialty Coffee", price: 26.00, image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&auto=format&fit=crop&q=60", description: "مشروب بارد ومنعش بطبقات الحليب والإسبريسو." },
+            { id: 14, name: "آيس كوفي كلاسيكي", enName: "Classic Iced Coffee", category: "Specialty Coffee", price: 24.00, image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&auto=format&fit=crop&q=60", description: "قهوة باردة ومثلجة محضرة من أجود حبوب القهوة." },
 
-            { id: 15, name: "آيسد إكس.أو. قهوة", enName: "Iced X.O. Coffee", category: "Signature Coffee", price: 26.00, image: "", description: "مشروب سكة المميز والبارد بنكهة خاصة." },
-            { id: 16, name: "فروستي فرابي", enName: "Frosty Frappe", category: "Signature Coffee", price: 28.00, image: "", description: "مشروب فرابي مثلج ومنعش." },
+            { id: 15, name: "آيسد إكس.أو. قهوة", enName: "Iced X.O. Coffee", category: "Signature Coffee", price: 26.00, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=60", description: "مشروب سكة المميز والبارد بنكهة خاصة." },
+            { id: 16, name: "فروستي فرابي", enName: "Frosty Frappe", category: "Signature Coffee", price: 28.00, image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500&auto=format&fit=crop&q=60", description: "مشروب فرابي مثلج ومنعش." },
 
-            { id: 17, name: "ماتشا لاتيه مثلج", enName: "Iced Matcha Latte", category: "Matcha", price: 28.00, image: "", description: "ماتشا يابانية أصلية باردة مع الحليب والثلج." },
-            { id: 18, name: "ماتشا مع طبقة المانجو", enName: "Mango Matcha Fusion", category: "Matcha", price: 30.00, image: "", description: "مزيج مبتكر يجمع بين حلاوة المانجو والماتشا." },
+            { id: 17, name: "ماتشا لاتيه مثلج", enName: "Iced Matcha Latte", category: "Matcha", price: 28.00, image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&auto=format&fit=crop&q=60", description: "ماتشا يابانية أصلية باردة مع الحليب والثلج." },
+            { id: 18, name: "ماتشا مع طبقة المانجو", enName: "Mango Matcha Fusion", category: "Matcha", price: 30.00, image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60", description: "مزيج مبتكر يجمع بين حلاوة المانجو والماتشا." },
 
-            { id: 19, name: "بروتين شيك (واي بروتين)", enName: "Protein Shake", category: "Non-Coffee Drinks", price: 35.00, image: "", description: "مشروب بروتين صحي عالي الجودة." },
-            { id: 20, name: "آيس تي الكركديه", enName: "Hibiscus Iced Tea", category: "Non-Coffee Drinks", price: 25.00, image: "", description: "شاي الكركديه البارد والمنعش." }
+            { id: 19, name: "بروتين شيك (واي بروتين)", enName: "Protein Shake", category: "Non-Coffee Drinks", price: 35.00, image: "https://images.unsplash.com/photo-1577805947697-89e18249d767?w=500&auto=format&fit=crop&q=60", description: "مشروب بروتين صحي عالي الجودة." },
+            { id: 20, name: "آيس تي الكركديه", enName: "Hibiscus Iced Tea", category: "Non-Coffee Drinks", price: 25.00, image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop&q=60", description: "شاي الكركديه البارد والمنعش." }
         ];
 
         let currentLang = 'ar';
         let currentCategory = 'all';
-        let activeProductId = null;
 
         function enterMenu() {
             document.getElementById('welcomeScreen').classList.add('hidden');
@@ -183,14 +177,9 @@
                 card.className = "bg-slate-900 border border-slate-800 overflow-hidden cursor-pointer hover:border-amber-500/50 transition duration-200 group shadow-md";
                 card.onclick = () => openModal(product);
                 
-                // عرض الصورة أو أيقونة افتراضية في حال لم يتم إرفاق صورة بعد
-                const imageContent = product.image 
-                    ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">`
-                    : `<div class="flex flex-col items-center justify-center text-slate-500 text-xs gap-1"><span>📷</span><span>انقر لإضافة صورة</span></div>`;
-
                 card.innerHTML = `
                     <div class="overflow-hidden h-48 bg-slate-800 relative flex items-center justify-center">
-                        ${imageContent}
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     </div>
                     <div class="p-4 text-center">
                         <h3 class="font-bold text-slate-200 mb-1">${currentLang === 'ar' ? product.name : product.enName}</h3>
@@ -230,15 +219,7 @@
         }
 
         function openModal(product) {
-            activeProductId = product.id;
-            const imgEl = document.getElementById('modalImg');
-            if (product.image) {
-                imgEl.src = product.image;
-                imgEl.classList.remove('hidden');
-            } else {
-                imgEl.src = '';
-                imgEl.classList.add('hidden');
-            }
+            document.getElementById('modalImg').src = product.image;
             document.getElementById('modalTitle').innerText = currentLang === 'ar' ? product.name : product.enName;
             document.getElementById('modalDesc').innerText = product.description;
             document.getElementById('modalPrice').innerText = `AED ${product.price.toFixed(2)}`;
@@ -247,25 +228,6 @@
 
         function closeModal() {
             document.getElementById('productModal').classList.add('hidden');
-            activeProductId = null;
-        }
-
-        // دالة رفع وإرفاق الصورة محلياً للمنتج المحدد
-        function uploadProductImage(event) {
-            const file = event.target.files[0];
-            if (file && activeProductId !== null) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const product = products.find(p => p.id === activeProductId);
-                    if (product) {
-                        product.image = e.target.result; // حفظ الصورة كبيانات محلية
-                        document.getElementById('modalImg').src = product.image;
-                        document.getElementById('modalImg').classList.remove('hidden');
-                        renderProducts(products); // تحديث العرض في الشبكة فوراً
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
         }
 
         function toggleLang() {
